@@ -8,12 +8,12 @@ let
 
   myHaskellPackages = pkgs.haskell.packages.${compiler}.override {
     overrides = hself: hsuper: {
-      "takedouble" = hself.callCabal2nix "takedouble" (gitignore ./.) { };
+      "telperion" = hself.callCabal2nix "telperion" (gitignore ./.) { };
     };
   };
 
   shell = myHaskellPackages.shellFor {
-    packages = p: [ p."takedouble" ];
+    packages = p: [ p."telperion" ];
     buildInputs = [
       myHaskellPackages.haskell-language-server
       pkgs.haskellPackages.cabal-fmt
@@ -28,16 +28,16 @@ let
     withHoogle = true;
   };
 
-  exe = pkgs.haskell.lib.justStaticExecutables (myHaskellPackages."takedouble");
+  exe = pkgs.haskell.lib.justStaticExecutables (myHaskellPackages."telperion");
 
   docker = pkgs.dockerTools.buildImage {
-    name = "takedouble";
-    config.Cmd = [ "${exe}/bin/takedouble" ];
+    name = "telperion";
+    config.Cmd = [ "${exe}/bin/telperion" ];
   };
 in {
   inherit shell;
   inherit exe;
   inherit docker;
   inherit myHaskellPackages;
-  "takedouble" = myHaskellPackages."takedouble";
+  "telperion" = myHaskellPackages."telperion";
 }
